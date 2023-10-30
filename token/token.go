@@ -25,6 +25,7 @@ const (
 	LT = "<"
 	RT = ">"
 
+	SEPERATE=","
 	SEMICOLON = ";"
 	IDENT     = "IDENT"
 
