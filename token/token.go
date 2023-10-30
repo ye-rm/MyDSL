@@ -47,4 +47,5 @@ const (
 	FUNCTION = "FUNCTION"
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
+	RETURN ="RETURN"
 )

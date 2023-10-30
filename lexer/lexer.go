@@ -22,6 +22,7 @@ var keywords = map[string]token.TokenType{
 	"fun":     token.FUNCTION,
 	"true":    token.TRUE,
 	"false":   token.FALSE,
+	"return":token.RETURN,
 }
 
 func lookupIdent(ident string) token.TokenType {
