@@ -17,6 +17,13 @@ const (
 	MULTI  = "*"
 	DIVIDE = "/"
 	MOD    = "%"
+	BANG = "!"
+
+	EQ     = "=="
+	NOT_EQ = "!="
+
+	LT = "<"
+	RT = ">"
 
 	SEMICOLON = ";"
 	IDENT     = "IDENT"
@@ -24,15 +31,20 @@ const (
 	INT = "INT"
 
 	STATE  = "STATE"
+	LPAREN = "("
+	RPAREN = ")"
 	LBRACE = "{"
 	RBARCE = "}"
 
-	RESPOND = "RESPOND"
-	CATCH   = "CATCH"
-	GOTO    = "GOTO"
-	HAVE    = "HAVE"
-	IF      = "IF"
-	ELSE    = "ELSE"
-	ELSEIF  = "ELSEIF"
-	LET     = "LET"
+	RESPOND  = "RESPOND"
+	CATCH    = "CATCH"
+	GOTO     = "GOTO"
+	HAVE     = "HAVE"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	ELSEIF   = "ELSEIF"
+	LET      = "LET"
+	FUNCTION = "FUNCTION"
+	TRUE     = "TRUE"
+	FALSE    = "FALSE"
 )

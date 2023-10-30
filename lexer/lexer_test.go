@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"awesomeProject/token"
+	"awesomeDSL/token"
 )
 
 func TestNextToken(t *testing.T) {
@@ -13,8 +13,14 @@ state hello{
 	respond hello;
 	goto tasks;
 }
+
 state tasks{
-}`
+}
+if cash != 0 {
+
+	
+}
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -39,6 +45,12 @@ state tasks{
 		{token.IDENT, "tasks"},
 		{token.LBRACE, "{"},
 		{token.RBARCE, "}"},
+		{token.IF,"if"},
+		{token.IDENT,"cash"},
+		{token.NOT_EQ,"!="},
+		{token.INT,"0"},
+		{token.LBRACE,"{"},
+		{token.RBARCE,"}"},
 		{token.EOF, ""},
 	}
 
