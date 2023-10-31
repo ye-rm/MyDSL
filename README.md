@@ -61,6 +61,8 @@ state save_money{
 	catch input
 	cash=cash+input;
 }
+
+fun add(x,y){return 2+3};
+let x=add(2,3);
 # others
 ```
-
