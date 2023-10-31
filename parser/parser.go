@@ -4,6 +4,7 @@ import (
 	"awesomeDSL/ast"
 	"awesomeDSL/lexer"
 	"awesomeDSL/token"
+	"fmt"
 )
 
 type Parser struct {
@@ -11,19 +12,30 @@ type Parser struct {
 
 	curToken  token.Token
 	peekToken token.Token
+
+	errors []string
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l}
+	p := &Parser{l: l, errors: []string{}}
 
 	//init cur&peek Token
-	p.NextToken()
-	p.NextToken()
+	p.nextToken()
+	p.nextToken()
 
 	return p
 }
 
-func (p *Parser) NextToken() {
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
+func (p *Parser) peekError(t token.TokenType) {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	p.errors = append(p.errors, msg)
+}
+
+func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
 }
@@ -32,10 +44,13 @@ func (p *Parser) phraseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.LET:
 		return p.phraseLetStatement()
+	case token.RETURN:
+		return p.phraseReturnStatement()
 	default:
 		return nil
 	}
 }
+
 func (p *Parser) phraseLetStatement() ast.Statement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 
@@ -50,8 +65,20 @@ func (p *Parser) phraseLetStatement() ast.Statement {
 	}
 	//Todo:ignore expression here
 	for !p.curTokenIs(token.SEMICOLON) {
-		p.NextToken()
+		p.nextToken()
 	}
+	return stmt
+}
+
+func (p *Parser) phraseReturnStatement() ast.Statement {
+	stmt := &ast.ReturnStatement{Token: p.curToken}
+
+	p.nextToken()
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
 	return stmt
 }
 
@@ -63,11 +90,13 @@ func (p *Parser) peekTokenIs(t token.TokenType) bool {
 	return p.peekToken.Type == t
 }
 
+// if the next token is t, then consume it and advance token
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
-		p.NextToken()
+		p.nextToken()
 		return true
 	} else {
+		p.peekError(t)
 		return false
 	}
 }
@@ -81,7 +110,7 @@ func (p *Parser) PhraseProgram() *ast.Program {
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
 		}
-		p.NextToken()
+		p.nextToken()
 	}
 	return program
 }
