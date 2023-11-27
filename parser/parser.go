@@ -50,12 +50,17 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 
+	//init map
 	p.PrefixParseFns = make(map[token.TokenType]PrefixParseFn)
 	p.InfixParseFns = make(map[token.TokenType]InfixParseFn)
+	//add parse function for each token
 	p.registerPrefix(token.IDENT, p.phraseIdentifier)
 	p.registerPrefix(token.INT, p.phraseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.phrasePrefixExpression)
 	p.registerPrefix(token.MINUS, p.phrasePrefixExpression)
+	p.registerPrefix(token.TRUE, p.phraseBoolean)
+	p.registerPrefix(token.FALSE, p.phraseBoolean)
+
 	p.registerInfix(token.MINUS, p.phraseInfixExpression)
 	p.registerInfix(token.PLUS, p.phraseInfixExpression)
 	p.registerInfix(token.DIVIDE, p.phraseInfixExpression)
@@ -64,6 +69,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.NOT_EQ, p.phraseInfixExpression)
 	p.registerInfix(token.LT, p.phraseInfixExpression)
 	p.registerInfix(token.RT, p.phraseInfixExpression)
+
 	return p
 }
 
@@ -193,14 +199,17 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 }
 
 func (p *Parser) phraseExpression(precedence int) ast.Expression {
+	//get prefix parse function
 	prefix := p.PrefixParseFns[p.curToken.Type]
 
 	if prefix == nil {
 		p.noPrefixParseFnError(p.curToken.Type)
 		return nil
 	}
-	leftExp := prefix()
 
+	leftExp := prefix()
+	//if next token is not semicolon and precedence is lower than next token's precedence
+	//then get infix parse function
 	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
 		infix := p.InfixParseFns[p.peekToken.Type]
 
@@ -258,9 +267,15 @@ func (p *Parser) phraseInfixExpression(left ast.Expression) ast.Expression {
 		Operator: p.curToken.Literal,
 		Left:     left,
 	}
+	//get operator precedence
 	precedence := p.curPrecedence()
 	p.nextToken()
+	//recursively call phraseExpression to get right expression
 	expression.Right = p.phraseExpression(precedence)
 
 	return expression
+}
+
+func (p *Parser) phraseBoolean() ast.Expression {
+	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
 }
