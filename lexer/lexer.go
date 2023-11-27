@@ -22,7 +22,7 @@ var keywords = map[string]token.TokenType{
 	"fun":     token.FUNCTION,
 	"true":    token.TRUE,
 	"false":   token.FALSE,
-	"return":token.RETURN,
+	"return":  token.RETURN,
 }
 
 func lookupIdent(ident string) token.TokenType {
@@ -85,7 +85,7 @@ func (l *Lexer) NextToken() token.Token {
 	case '%':
 		tok = newToken(token.MOD, l.ch)
 	case ',':
-		tok = newToken(token.SEPERATE,l.ch)
+		tok = newToken(token.SEPERATE, l.ch)
 	case '{':
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':

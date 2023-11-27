@@ -51,10 +51,19 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 
 	p.PrefixParseFns = make(map[token.TokenType]PrefixParseFn)
+	p.InfixParseFns = make(map[token.TokenType]InfixParseFn)
 	p.registerPrefix(token.IDENT, p.phraseIdentifier)
 	p.registerPrefix(token.INT, p.phraseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.phrasePrefixExpression)
 	p.registerPrefix(token.MINUS, p.phrasePrefixExpression)
+	p.registerInfix(token.MINUS, p.phraseInfixExpression)
+	p.registerInfix(token.PLUS, p.phraseInfixExpression)
+	p.registerInfix(token.DIVIDE, p.phraseInfixExpression)
+	p.registerInfix(token.MULTI, p.phraseInfixExpression)
+	p.registerInfix(token.EQ, p.phraseInfixExpression)
+	p.registerInfix(token.NOT_EQ, p.phraseInfixExpression)
+	p.registerInfix(token.LT, p.phraseInfixExpression)
+	p.registerInfix(token.RT, p.phraseInfixExpression)
 	return p
 }
 
@@ -192,6 +201,15 @@ func (p *Parser) phraseExpression(precedence int) ast.Expression {
 	}
 	leftExp := prefix()
 
+	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
+		infix := p.InfixParseFns[p.peekToken.Type]
+
+		if infix == nil {
+			return leftExp
+		}
+		p.nextToken()
+		leftExp = infix(leftExp)
+	}
 	return leftExp
 }
 
@@ -207,4 +225,42 @@ func (p *Parser) PhraseProgram() *ast.Program {
 		p.nextToken()
 	}
 	return program
+}
+
+var precedences = map[token.TokenType]int{
+	token.EQ:     EQUALS,
+	token.NOT_EQ: EQUALS,
+	token.LT:     LESSGREATER,
+	token.RT:     LESSGREATER,
+	token.PLUS:   SUM,
+	token.MINUS:  SUM,
+	token.DIVIDE: PRODUCT,
+	token.MULTI:  PRODUCT,
+}
+
+func (p *Parser) curPrecedence() int {
+	if p, ok := precedences[p.curToken.Type]; ok {
+		return p
+	}
+	return LOWEST
+}
+
+func (p *Parser) peekPrecedence() int {
+	if p, ok := precedences[p.peekToken.Type]; ok {
+		return p
+	}
+	return LOWEST
+}
+
+func (p *Parser) phraseInfixExpression(left ast.Expression) ast.Expression {
+	expression := &ast.InfixExpression{
+		Token:    p.curToken,
+		Operator: p.curToken.Literal,
+		Left:     left,
+	}
+	precedence := p.curPrecedence()
+	p.nextToken()
+	expression.Right = p.phraseExpression(precedence)
+
+	return expression
 }
