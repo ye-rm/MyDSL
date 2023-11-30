@@ -17,7 +17,7 @@ const (
 	MULTI  = "*"
 	DIVIDE = "/"
 	MOD    = "%"
-	BANG = "!"
+	BANG   = "!"
 
 	EQ     = "=="
 	NOT_EQ = "!="
@@ -25,7 +25,7 @@ const (
 	LT = "<"
 	RT = ">"
 
-	SEPERATE=","
+	SEPARATE  = ","
 	SEMICOLON = ";"
 	IDENT     = "IDENT"
 
@@ -48,5 +48,5 @@ const (
 	FUNCTION = "FUNCTION"
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
-	RETURN ="RETURN"
+	RETURN   = "RETURN"
 )

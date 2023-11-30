@@ -85,7 +85,7 @@ func (l *Lexer) NextToken() token.Token {
 	case '%':
 		tok = newToken(token.MOD, l.ch)
 	case ',':
-		tok = newToken(token.SEPERATE, l.ch)
+		tok = newToken(token.SEPARATE, l.ch)
 	case '{':
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':

@@ -60,6 +60,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.MINUS, p.phrasePrefixExpression)
 	p.registerPrefix(token.TRUE, p.phraseBoolean)
 	p.registerPrefix(token.FALSE, p.phraseBoolean)
+	p.registerPrefix(token.LPAREN, p.phraseGroupedExpression)
+	p.registerPrefix(token.IF, p.phraseIfExpression)
+	p.registerPrefix(token.FUNCTION, p.phraseFunctionLiteral)
 
 	p.registerInfix(token.MINUS, p.phraseInfixExpression)
 	p.registerInfix(token.PLUS, p.phraseInfixExpression)
@@ -278,4 +281,98 @@ func (p *Parser) phraseInfixExpression(left ast.Expression) ast.Expression {
 
 func (p *Parser) phraseBoolean() ast.Expression {
 	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
+}
+
+func (p *Parser) phraseGroupedExpression() ast.Expression {
+	p.nextToken()
+
+	exp := p.phraseExpression(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+	return exp
+}
+
+func (p *Parser) phraseIfExpression() ast.Expression {
+	expression := &ast.IfExpression{Token: p.curToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+	p.nextToken()
+	expression.Condition = p.phraseExpression(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+	expression.Consequence = p.phraseBlockStatement()
+
+	if p.peekTokenIs(token.ELSE) {
+		p.nextToken()
+
+		if !p.expectPeek(token.LBRACE) {
+			return nil
+		}
+		expression.Alternative = p.phraseBlockStatement()
+	}
+	return expression
+}
+
+func (p *Parser) phraseBlockStatement() *ast.BlockStatement {
+	block := &ast.BlockStatement{Token: p.curToken}
+	block.Statements = []ast.Statement{}
+
+	p.nextToken()
+	for !p.curTokenIs(token.RBARCE) && !p.curTokenIs(token.EOF) {
+		stmt := p.phraseStatement()
+		if stmt != nil {
+			block.Statements = append(block.Statements, stmt)
+		}
+		p.nextToken()
+	}
+	return block
+}
+
+func (p *Parser) phraseFunctionLiteral() ast.Expression {
+	lit := &ast.FunctionLiteral{Token: p.curToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+	lit.Parameters = p.phraseFunctionParameters()
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+	lit.Body = p.phraseBlockStatement()
+
+	return lit
+}
+
+func (p *Parser) phraseFunctionParameters() []*ast.Identifier {
+	identifiers := []*ast.Identifier{}
+
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return identifiers
+	}
+	p.nextToken()
+	ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	identifiers = append(identifiers, ident)
+
+	for p.peekTokenIs(token.SEPARATE) {
+		p.nextToken()
+		p.nextToken()
+		ident := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+		identifiers = append(identifiers, ident)
+	}
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+	return identifiers
 }
