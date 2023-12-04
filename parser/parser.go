@@ -64,6 +64,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IF, p.phraseIfExpression)
 	p.registerPrefix(token.FUNCTION, p.phraseFunctionLiteral)
 
+	p.registerInfix(token.LPAREN, p.phraseCallExpression)
 	p.registerInfix(token.MINUS, p.phraseInfixExpression)
 	p.registerInfix(token.PLUS, p.phraseInfixExpression)
 	p.registerInfix(token.DIVIDE, p.phraseInfixExpression)
@@ -113,7 +114,10 @@ func (p *Parser) phraseLetStatement() ast.Statement {
 	if !p.expectPeek(token.ASSIGN) {
 		return nil
 	}
-	//Todo:ignore expression here
+
+	p.nextToken()
+	stmt.Value = p.phraseExpression(LOWEST)
+
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -125,7 +129,8 @@ func (p *Parser) phraseReturnStatement() ast.Statement {
 
 	p.nextToken()
 
-	//todo:ignore expression here
+	stmt.ReturnValue = p.phraseExpression(LOWEST)
+
 	for !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -225,7 +230,7 @@ func (p *Parser) phraseExpression(precedence int) ast.Expression {
 	return leftExp
 }
 
-func (p *Parser) PhraseProgram() *ast.Program {
+func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
 
@@ -248,6 +253,7 @@ var precedences = map[token.TokenType]int{
 	token.MINUS:  SUM,
 	token.DIVIDE: PRODUCT,
 	token.MULTI:  PRODUCT,
+	token.LPAREN: CALL,
 }
 
 func (p *Parser) curPrecedence() int {
@@ -375,4 +381,34 @@ func (p *Parser) phraseFunctionParameters() []*ast.Identifier {
 		return nil
 	}
 	return identifiers
+}
+
+func (p *Parser) phraseCallExpression(function ast.Expression) ast.Expression {
+	exp := &ast.CallExpression{Token: p.curToken, Function: function}
+	exp.Arguments = p.phraseCallArguments()
+	return exp
+}
+
+func (p *Parser) phraseCallArguments() []ast.Expression {
+	args := []ast.Expression{}
+
+	//no arguments
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return args
+	}
+	p.nextToken()
+	args = append(args, p.phraseExpression(LOWEST))
+
+	for p.peekTokenIs(token.SEPARATE) {
+		p.nextToken()
+		p.nextToken()
+		args = append(args, p.phraseExpression(LOWEST))
+	}
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return args
 }

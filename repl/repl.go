@@ -1,30 +1,51 @@
 package repl
 
 import (
+	"awesomeDSL/lexer"
+	"awesomeDSL/parser"
 	"bufio"
 	"fmt"
 	"io"
-	"awesomeDSL/lexer"
-	"awesomeDSL/token"
 )
 
-const PROMPT =">>"
+const PROMPT = ">>"
+const WELCOME = `   __    _    _  ____  ___  _____  __  __  ____  ____   ___  __
+  /__\  ( \/\/ )( ___)/ __)(  _  )(  \/  )( ___)(  _ \ / __)(  )
+ /(__)\  )    (  )__) \__ \ )(_)(  )    (  )__)  )(_) )\__ \ )(__
+(__)(__)(__/\__)(____)(___/(_____)(_/\/\_)(____)(____/ (___/(____)
+`
 
-func Start(in io.Reader,out io.Writer){
-	scanner:=bufio.NewScanner(in)
+func Start(in io.Reader, out io.Writer) {
+	fmt.Fprint(out, WELCOME)
+	scanner := bufio.NewScanner(in)
 
-	for{
-		fmt.Fprintf(out,"%s",PROMPT)
-		scanned:=scanner.Scan()
+	for {
+		fmt.Fprint(out, PROMPT)
+		scanned := scanner.Scan()
 		if !scanned {
 			return
 		}
 
 		line := scanner.Text()
-		l:=lexer.New(line)
+		l := lexer.New(line)
+		p := parser.New(l)
 
-		for tok:=l.NextToken();tok.Type!=token.EOF;tok=l.NextToken(){
-			fmt.Fprintf(out,"%+v\n",tok)
+		program := p.ParseProgram()
+
+		if len(p.Errors()) != 0 {
+			printParserErrors(out, p.Errors())
+			continue
 		}
+
+		io.WriteString(out, program.String())
+		io.WriteString(out, "\n")
+	}
+}
+
+func printParserErrors(out io.Writer, errors []string) {
+	io.WriteString(out, "Woops! Something bad happens!\n")
+	io.WriteString(out, " parser errors:\n")
+	for _, msg := range errors {
+		io.WriteString(out, "\t"+msg+"\n")
 	}
 }
