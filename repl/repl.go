@@ -1,6 +1,7 @@
 package repl
 
 import (
+	"awesomeDSL/evaluator"
 	"awesomeDSL/lexer"
 	"awesomeDSL/parser"
 	"bufio"
@@ -37,7 +38,8 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
+		evaluated := evaluator.Eval(program)
+		io.WriteString(out, evaluated.Inspect())
 		io.WriteString(out, "\n")
 	}
 }
