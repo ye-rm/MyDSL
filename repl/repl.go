@@ -3,6 +3,7 @@ package repl
 import (
 	"awesomeDSL/evaluator"
 	"awesomeDSL/lexer"
+	"awesomeDSL/object"
 	"awesomeDSL/parser"
 	"bufio"
 	"fmt"
@@ -19,7 +20,7 @@ const WELCOME = `   __    _    _  ____  ___  _____  __  __  ____  ____   ___  __
 func Start(in io.Reader, out io.Writer) {
 	fmt.Fprint(out, WELCOME)
 	scanner := bufio.NewScanner(in)
-
+	env := object.NewEnvironment()
 	for {
 		fmt.Fprint(out, PROMPT)
 		scanned := scanner.Scan()
@@ -38,7 +39,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		io.WriteString(out, evaluated.Inspect())
 		io.WriteString(out, "\n")
 	}
