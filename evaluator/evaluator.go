@@ -1,3 +1,4 @@
+// evaluate ast node
 package evaluator
 
 import (
@@ -12,7 +13,9 @@ var (
 	FALSE = &object.Boolean{Value: false}
 )
 
+// evaluate ast node, node: ast.Node interface, env: symbol table
 func Eval(node ast.Node, env *object.Environment) object.Object {
+	//evaluate different ast node
 	switch node := node.(type) {
 	case *ast.Program:
 		return evalProgram(node.Statements, env)
@@ -78,7 +81,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return function
 		}
 
-		//对参数进行求值,放入args中
+		//evaluate arguments, append to args
 		args := evalExpressions(node.Arguments, env)
 		if len(args) == 1 && isError(args[0]) {
 			return args[0]

@@ -1,3 +1,4 @@
+// DSL use object to represent value
 package object
 
 import (
@@ -7,6 +8,7 @@ import (
 	"strings"
 )
 
+// object type
 const (
 	INTEGER_OBJ      = "INTEGER"
 	BOOLEAN_OBJ      = "BOOLEAN"
@@ -18,6 +20,7 @@ const (
 
 type ObjectType string
 
+// Object interface
 type Object interface {
 	Type() ObjectType
 	Inspect() string
@@ -50,7 +53,6 @@ type Null struct{}
 func (n *Null) Inspect() string {
 	return "null"
 }
-
 func (n *Null) Type() ObjectType {
 	return NULL_OBJ
 }
@@ -62,7 +64,6 @@ type ReturnValue struct {
 func (rv *ReturnValue) Inspect() string {
 	return rv.Value.Inspect()
 }
-
 func (rv *ReturnValue) Type() ObjectType {
 	return RETURN_VALUE_OBJ
 }
@@ -74,7 +75,6 @@ type Error struct {
 func (e *Error) Inspect() string {
 	return "ERROR: " + e.Message
 }
-
 func (e *Error) Type() ObjectType {
 	return ERROR_OBJ
 }
@@ -98,7 +98,6 @@ func (f *Function) Inspect() string {
 	out.WriteString("\n}")
 	return out.String()
 }
-
 func (f *Function) Type() ObjectType {
 	return FUNCTION_OBJ
 }

@@ -1,3 +1,4 @@
+// repl package is a read-eval-print-loop for our language.
 package repl
 
 import (
@@ -17,6 +18,7 @@ const WELCOME = `   __    _    _  ____  ___  _____  __  __  ____  ____   ___  __
 (__)(__)(__/\__)(____)(___/(_____)(_/\/\_)(____)(____/ (___/(____)
 `
 
+// Start the repl loop
 func Start(in io.Reader, out io.Writer) {
 	fmt.Fprint(out, WELCOME)
 	scanner := bufio.NewScanner(in)

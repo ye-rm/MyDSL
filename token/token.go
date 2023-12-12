@@ -1,12 +1,15 @@
+// content: token type and token struct
 package token
 
 type TokenType string
 
+// Token struct
 type Token struct {
-	Type    TokenType
-	Literal string
+	Type    TokenType // token type
+	Literal string    // token literal
 }
 
+// token type
 const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"

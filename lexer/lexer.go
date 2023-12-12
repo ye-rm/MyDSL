@@ -1,12 +1,15 @@
+// lexer converts the input string into token stream
 package lexer
 
 import "awesomeDSL/token"
 
+// Lexer struct contains the input string, the current position in the input
+// and the current reading position in the input
 type Lexer struct {
-	input        string
-	position     int
-	readPosition int
-	ch           byte
+	input        string // input string
+	position     int    // current position in input (points to current char)
+	readPosition int    // current reading position in input (after current char)
+	ch           byte   // current char under examination
 }
 
 var keywords = map[string]token.TokenType{
@@ -38,6 +41,7 @@ func (l *Lexer) skipWhitespace() {
 	}
 }
 
+// New returns a new Lexer. It takes an input string and returns a pointer to a Lexer
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
@@ -54,6 +58,7 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
+// NextToken returns the next token in the input string
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 	l.skipWhitespace()

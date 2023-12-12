@@ -1,33 +1,36 @@
+// environment implement symbol table
 package object
 
-// 创建‘子’环境，将其外层环境作为参数传入
+// add a new environment with outer environment
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
 	env.outer = outer
 	return env
 }
 
+// create a new environment
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
 	return &Environment{store: s, outer: nil}
 }
 
+// Environment struct
 type Environment struct {
 	store map[string]Object //符号表
 	outer *Environment      //外层环境
 }
 
-// 从当前环境中查找符号,如果没有找到,则递归的向外层查找
+// get symbol from current environment, if not found, get from outer environment
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {
-		//递归的向外层查找符号
+		// recursively get symbol from outer environment
 		obj, ok = e.outer.Get(name)
 	}
 	return obj, ok
 }
 
-// 向当前环境中添加符号
+// add symbol to current environment
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val

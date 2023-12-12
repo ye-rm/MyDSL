@@ -1,3 +1,4 @@
+// DSL parser, convert token stream to AST
 package parser
 
 import (
@@ -20,9 +21,13 @@ const (
 	CALL        // myFunction(X)
 )
 
+// define prefix parse function and infix parse function
 type PrefixParseFn func() ast.Expression
+
+// define infix parse function
 type InfixParseFn func(ast.Expression) ast.Expression
 
+// Parser struct contains a lexer and a token pair (curToken and peekToken)
 type Parser struct {
 	l *lexer.Lexer
 
@@ -35,14 +40,17 @@ type Parser struct {
 	InfixParseFns  map[token.TokenType]InfixParseFn
 }
 
+// register prefix parse function for each token
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn PrefixParseFn) {
 	p.PrefixParseFns[tokenType] = fn
 }
 
+// register infix parse function for each token
 func (p *Parser) registerInfix(tokenType token.TokenType, fn InfixParseFn) {
 	p.InfixParseFns[tokenType] = fn
 }
 
+// create a new parser, parameter is a lexer
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l, errors: []string{}}
 
@@ -63,7 +71,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.phraseGroupedExpression)
 	p.registerPrefix(token.IF, p.phraseIfExpression)
 	p.registerPrefix(token.FUNCTION, p.phraseFunctionLiteral)
-
+	//add infix parse function for each token
 	p.registerInfix(token.LPAREN, p.phraseCallExpression)
 	p.registerInfix(token.MINUS, p.phraseInfixExpression)
 	p.registerInfix(token.PLUS, p.phraseInfixExpression)
@@ -77,6 +85,7 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
+// return errors slice
 func (p *Parser) Errors() []string {
 	return p.errors
 }
@@ -102,6 +111,7 @@ func (p *Parser) phraseStatement() ast.Statement {
 	}
 }
 
+// phrase let statement, return ast.Statement interface
 func (p *Parser) phraseLetStatement() ast.Statement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 
@@ -124,6 +134,7 @@ func (p *Parser) phraseLetStatement() ast.Statement {
 	return stmt
 }
 
+// phrase return statement, return ast.Statement interface
 func (p *Parser) phraseReturnStatement() ast.Statement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 
@@ -170,6 +181,7 @@ func (p *Parser) phraseIntegerLiteral() ast.Expression {
 	return lit
 }
 
+// phrase prefix expression, return ast.Expression interface
 func (p *Parser) phrasePrefixExpression() ast.Expression {
 	expression := &ast.PrefixExpression{
 		Token:    p.curToken,
@@ -200,12 +212,14 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 	}
 }
 
+// no prefix parse function for current token
 func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 	msg := fmt.Sprintf("no prefix parse function for %s found", t)
 
 	p.errors = append(p.errors, msg)
 }
 
+// phrase expression, return ast.Expression interface
 func (p *Parser) phraseExpression(precedence int) ast.Expression {
 	//get prefix parse function
 	prefix := p.PrefixParseFns[p.curToken.Type]
@@ -230,6 +244,8 @@ func (p *Parser) phraseExpression(precedence int) ast.Expression {
 	return leftExp
 }
 
+// phrase program, return ast.Program interface
+// program is a slice of statements
 func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
