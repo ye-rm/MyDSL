@@ -18,8 +18,10 @@ state tasks{
 }
 if cash != 0 {
 
-	
+
 }
+"foobar"
+"foo bar"
 `
 
 	tests := []struct {
@@ -45,12 +47,14 @@ if cash != 0 {
 		{token.IDENT, "tasks"},
 		{token.LBRACE, "{"},
 		{token.RBARCE, "}"},
-		{token.IF,"if"},
-		{token.IDENT,"cash"},
-		{token.NOT_EQ,"!="},
-		{token.INT,"0"},
-		{token.LBRACE,"{"},
-		{token.RBARCE,"}"},
+		{token.IF, "if"},
+		{token.IDENT, "cash"},
+		{token.NOT_EQ, "!="},
+		{token.INT, "0"},
+		{token.LBRACE, "{"},
+		{token.RBARCE, "}"},
+		{token.STRING, "foobar"},
+		{token.STRING, "foo bar"},
 		{token.EOF, ""},
 	}
 

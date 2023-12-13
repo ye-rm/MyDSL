@@ -1,4 +1,4 @@
-// content: token type and token struct
+// Package token content: token type and token struct
 package token
 
 type TokenType string
@@ -52,4 +52,5 @@ const (
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
 	RETURN   = "RETURN"
+	STRING   = "STRING"
 )

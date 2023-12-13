@@ -1,4 +1,4 @@
-// ast contains types that represent the nodes of the abstract syntax tree.
+// Package ast contains types that represent the nodes of the abstract syntax tree.
 package ast
 
 import (
@@ -34,7 +34,7 @@ func (es *ExpressionStatement) statementNode() {
 
 }
 
-// return the phrase description
+// TokenLiteral return the phrase description
 func (es *ExpressionStatement) TokenLiteral() string {
 	return es.Token.Literal
 }
@@ -54,7 +54,7 @@ type Program struct {
 	Statements []Statement
 }
 
-// get the phrase item
+// TokenLiteral get the phrase item
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()
@@ -235,7 +235,7 @@ func (ie *IfExpression) String() string {
 	return out.String()
 }
 
-// `BlockStatement` represents the statement of the form "{ <statement>... }"
+// BlockStatement represents the statement of the form "{ <statement>... }"
 type BlockStatement struct {
 	Token      token.Token
 	Statements []Statement
@@ -303,3 +303,13 @@ func (ce *CallExpression) String() string {
 
 	return out.String()
 }
+
+// StringLiteral represents form "<string literal>"
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+
+func (sl *StringLiteral) expressionNode()      {}
+func (sl *StringLiteral) TokenLiteral() string { return sl.TokenLiteral() }
+func (sl *StringLiteral) String() string       { return sl.TokenLiteral() }

@@ -1,14 +1,14 @@
-// environment implement symbol table
+// Package object environment implement symbol table
 package object
 
-// add a new environment with outer environment
+// NewEnclosedEnvironment add a new environment with outer environment
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
 	env.outer = outer
 	return env
 }
 
-// create a new environment
+// NewEnvironment create a new environment
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
 	return &Environment{store: s, outer: nil}
@@ -20,7 +20,7 @@ type Environment struct {
 	outer *Environment      //外层环境
 }
 
-// get symbol from current environment, if not found, get from outer environment
+// Get symbol from current environment, if not found, get from outer environment
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {
@@ -30,7 +30,7 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
-// add symbol to current environment
+// Set add symbol to current environment
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val

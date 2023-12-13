@@ -533,19 +533,21 @@ func TestCallExpressionParsing(t *testing.T) {
 	testInfixExpression(t, exp.Arguments[2], 4, "+", 5)
 }
 
-func TestPrintAstTree(t *testing.T) {
-	input := `let x=5;
-	let y=10;
-	let _cc=12312;
-	return add(2,3);
-	return 31;
-	return x+2;`
+func TestStringLiteralExpression(t *testing.T) {
+	input := `"hello world";`
 
 	l := lexer.New(input)
 	p := New(l)
-
 	program := p.ParseProgram()
 	checkParserErrors(t, p)
 
-	fmt.Println(program.String())
+	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	literal, ok := stmt.Expression.(*ast.StringLiteral)
+	if !ok {
+		t.Fatalf("exp not *ast.StringLiteral. got=%T", stmt.Expression)
+	}
+
+	if literal.Value != "hello world" {
+		t.Errorf("literal.Value not %q. got=%q", "hello world", literal.Value)
+	}
 }

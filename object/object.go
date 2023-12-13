@@ -1,4 +1,4 @@
-// DSL use object to represent value
+// Package object DSL use object to represent value
 package object
 
 import (
@@ -15,12 +15,15 @@ const (
 	NULL_OBJ         = "NULL"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	FUNCTION_OBJ     = "FUNCTION"
+	STRING_OBJ       = "STRING"
 	ERROR_OBJ        = "ERROR"
 )
 
 type ObjectType string
 
 // Object interface
+// Type return obj type
+// Inspect return message of obj
 type Object interface {
 	Type() ObjectType
 	Inspect() string
@@ -101,3 +104,10 @@ func (f *Function) Inspect() string {
 func (f *Function) Type() ObjectType {
 	return FUNCTION_OBJ
 }
+
+type String struct {
+	Value string
+}
+
+func (s *String) Inspect() string  { return s.Value }
+func (s *String) Type() ObjectType { return STRING_OBJ }
