@@ -22,6 +22,7 @@ if cash != 0 {
 }
 "foobar"
 "foo bar"
+[1,2];
 `
 
 	tests := []struct {
@@ -55,6 +56,12 @@ if cash != 0 {
 		{token.RBARCE, "}"},
 		{token.STRING, "foobar"},
 		{token.STRING, "foo bar"},
+		{token.LBRACKET, "["},
+		{token.INT, "1"},
+		{token.SEPARATE, ","},
+		{token.INT, "2"},
+		{token.RBRACKET, "]"},
+		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 

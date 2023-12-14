@@ -34,11 +34,13 @@ const (
 
 	INT = "INT"
 
-	STATE  = "STATE"
-	LPAREN = "("
-	RPAREN = ")"
-	LBRACE = "{"
-	RBARCE = "}"
+	STATE    = "STATE"
+	LPAREN   = "("
+	RPAREN   = ")"
+	LBRACE   = "{"
+	RBARCE   = "}"
+	LBRACKET = "["
+	RBRACKET = "]"
 
 	RESPOND  = "RESPOND"
 	CATCH    = "CATCH"
