@@ -1,4 +1,5 @@
 // Package object environment implement symbol table
+// This implement the symbol table we will use to store the bindings of identifiers to values.
 package object
 
 // NewEnclosedEnvironment add a new environment with outer environment
@@ -16,8 +17,8 @@ func NewEnvironment() *Environment {
 
 // Environment struct
 type Environment struct {
-	store map[string]Object //符号表
-	outer *Environment      //外层环境
+	store map[string]Object //symbol table
+	outer *Environment      //outer environment
 }
 
 // Get symbol from current environment, if not found, get from outer environment

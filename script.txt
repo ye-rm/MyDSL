@@ -1,0 +1,8 @@
+let value=100;
+let check=value;
+let hello="hi, may I help you?";
+let bye="bye, see you next time!";
+let name="my name is bot";
+let call=puts("hello, what is your name?");
+let canyouhelpme=puts("yeah, what can I do for you?");
+let checkmybill=puts("sure, let me check your bill, value: ",value);

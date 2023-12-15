@@ -1,4 +1,6 @@
 // Package object DSL use object to represent value
+// every value in our language will be represented by an object
+// objects will be evaluated in evaluator
 package object
 
 import (
@@ -8,7 +10,7 @@ import (
 	"strings"
 )
 
-// object type
+// object types
 const (
 	INTEGER_OBJ      = "INTEGER"
 	BOOLEAN_OBJ      = "BOOLEAN"
@@ -17,6 +19,7 @@ const (
 	FUNCTION_OBJ     = "FUNCTION"
 	STRING_OBJ       = "STRING"
 	ARRAY_OBJ        = "ARRAY"
+	BUILTIN_OBJ      = "BUILTIN"
 	ERROR_OBJ        = "ERROR"
 )
 
@@ -129,3 +132,12 @@ func (ao *Array) Inspect() string {
 	return out.String()
 }
 func (ao *Array) Type() ObjectType { return ARRAY_OBJ }
+
+type BuiltinFunction func(args ...Object) Object
+
+type Builtin struct {
+	Fn BuiltinFunction
+}
+
+func (b *Builtin) Inspect() string  { return "builtin function" }
+func (b *Builtin) Type() ObjectType { return BUILTIN_OBJ }
