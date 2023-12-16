@@ -33,7 +33,6 @@ const (
 
 	INT = "INT"
 
-	STATE    = "STATE"
 	LPAREN   = "("
 	RPAREN   = ")"
 	LBRACE   = "{"
