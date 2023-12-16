@@ -1,4 +1,12 @@
 // Package lexer converts the input string into token stream
+// The lexer is responsible for taking the raw input and breaking it into tokens.
+// Example:
+//
+//	l := lexer.New(input)
+//	for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
+//		fmt.Printf("%+v\n", tok)
+//	}
+//	fmt.Printf("%+v\n", tok)
 package lexer
 
 import "awesomeDSL/token"
@@ -13,19 +21,14 @@ type Lexer struct {
 }
 
 var keywords = map[string]token.TokenType{
-	"state":   token.STATE,
-	"respond": token.RESPOND,
-	"catch":   token.CATCH,
-	"goto":    token.GOTO,
-	"have":    token.HAVE,
-	"if":      token.IF,
-	"else":    token.ELSE,
-	"elseif":  token.ELSEIF,
-	"let":     token.LET,
-	"fun":     token.FUNCTION,
-	"true":    token.TRUE,
-	"false":   token.FALSE,
-	"return":  token.RETURN,
+	"if":     token.IF,
+	"else":   token.ELSE,
+	"elseif": token.ELSEIF,
+	"let":    token.LET,
+	"fun":    token.FUNCTION,
+	"true":   token.TRUE,
+	"false":  token.FALSE,
+	"return": token.RETURN,
 }
 
 func lookupIdent(ident string) token.TokenType {

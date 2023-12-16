@@ -9,7 +9,6 @@ type Token struct {
 	Literal string    // token literal
 }
 
-// token type
 const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
@@ -42,10 +41,6 @@ const (
 	LBRACKET = "["
 	RBRACKET = "]"
 
-	RESPOND  = "RESPOND"
-	CATCH    = "CATCH"
-	GOTO     = "GOTO"
-	HAVE     = "HAVE"
 	IF       = "IF"
 	ELSE     = "ELSE"
 	ELSEIF   = "ELSEIF"

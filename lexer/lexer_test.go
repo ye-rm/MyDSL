@@ -9,13 +9,6 @@ import (
 func TestNextToken(t *testing.T) {
 	input := `let cash = 0;
 
-state hello{
-	respond hello;
-	goto tasks;
-}
-
-state tasks{
-}
 if cash != 0 {
 
 
@@ -34,20 +27,6 @@ if cash != 0 {
 		{token.ASSIGN, "="},
 		{token.INT, "0"},
 		{token.SEMICOLON, ";"},
-		{token.STATE, "state"},
-		{token.IDENT, "hello"},
-		{token.LBRACE, "{"},
-		{token.RESPOND, "respond"},
-		{token.IDENT, "hello"},
-		{token.SEMICOLON, ";"},
-		{token.GOTO, "goto"},
-		{token.IDENT, "tasks"},
-		{token.SEMICOLON, ";"},
-		{token.RBARCE, "}"},
-		{token.STATE, "state"},
-		{token.IDENT, "tasks"},
-		{token.LBRACE, "{"},
-		{token.RBARCE, "}"},
 		{token.IF, "if"},
 		{token.IDENT, "cash"},
 		{token.NOT_EQ, "!="},

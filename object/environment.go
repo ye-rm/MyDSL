@@ -3,6 +3,7 @@
 package object
 
 // NewEnclosedEnvironment add a new environment with outer environment
+// when we evaluate a function, we create a new environment that is enclosed by the environment that was active when the function was created
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
 	env.outer = outer

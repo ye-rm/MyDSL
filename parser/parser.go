@@ -1,4 +1,15 @@
 // Package parser DSL parser, convert token stream to AST
+// Example:
+//
+//	l: lexer.New(input)
+//	p: parser.New(l)
+//	program: p.ParseProgram()
+//	if len(p.Errors()) != 0 {
+//		printParserErrors(out, p.Errors())
+//		continue
+//	}
+//
+// Parse should depend on lexer, so we can get token stream from lexer
 package parser
 
 import (

@@ -1,5 +1,17 @@
 // Package evaluator evaluate ast node
 // evaluator object in ast node
+// Example:
+//
+//	l: lexer.New(input)
+//	p: parser.New(l)
+//	program: p.ParseProgram()
+//	env: object.NewEnvironment()
+//	evaluated: evaluator.Eval(program, env)
+//	if evaluated != nil {
+//		fmt.Println(evaluated.Inspect())
+//	}
+//
+// Note you should first create lexer, parser, ast node, symbol table, then evaluate ast node
 package evaluator
 
 import (

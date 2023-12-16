@@ -1,4 +1,3 @@
-// awesomeDSL entry point
 // awesomeDSL is a simple programming language, which helps you build your own DSL.
 // support basic data types, such as integer, boolean, string, array
 // have builtin functions, such as len, first, last, rest, push

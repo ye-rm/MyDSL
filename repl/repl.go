@@ -1,5 +1,7 @@
 // Package repl is a read-eval-print-loop for our language.
 // now repl are replaced by tui for better user experience
+// if your do not like tui, you can use repl instead
+// To use repl, in your main.go, replace tui.GUI() with repl.Start(os.Stdin, os.Stdout)
 package repl
 
 import (
