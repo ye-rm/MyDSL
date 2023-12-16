@@ -3,6 +3,21 @@
 // have builtin functions, such as len, first, last, rest, push
 // support user defined function
 // support if-else statement
+// support user defined function
+// Example for a simple program:
+//
+//	let hello = puts("hello world");
+//	let a = 1;
+//	let b = 2;
+//	let add = fn(x, y) {
+//		x + y;
+//	};
+//	let result = add(a, b);
+//	let tellmeresult= if result > 0 {
+//		puts("result is positive");
+//	} else {
+//		puts("result is negative");
+//	};
 package main
 
 import (
@@ -13,16 +28,18 @@ import (
 
 func main() {
 	if len(os.Args) != 2 {
-		os.Stderr.WriteString("Usage:./program <filename>\n")
+		_, _ = os.Stderr.WriteString("Usage:./program <filename>\n")
 		os.Exit(1)
 	}
 	file, err := os.Open(os.Args[1])
 	if err != nil {
-		os.Stderr.WriteString("Open file error\n")
+		_, _ = os.Stderr.WriteString("Open file error\n")
 		os.Exit(1)
 	}
 
-	defer file.Close()
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
 	gpt.Init()
 	tui.LoadScript(file)
 	tui.GUI()
