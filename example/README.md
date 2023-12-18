@@ -1,5 +1,13 @@
 # examples for awesomeDSL
 
+let question_without_space = variable, function call, if-else statement, builtin function
+
+when you type question, the bot will answer you with value at right of =
+
+for example,
+
+with let a = 1, when you type 'a', the bot will answer you with '1'
+
 ## example1 
 
 Best bank service bot ever
