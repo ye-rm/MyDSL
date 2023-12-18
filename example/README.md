@@ -58,6 +58,6 @@ To build this bot in your store
 
 Because `OPENAI_FOR_DSL` not set in this 2 examples, if ask undefined questions, the bot will simples reply it do not understand what you say.
 
-If you wanner use openai-api to get better answers, please set `OPENAI_FOR_DSL` to true and `OPENAI_API` to in your environment variables.Your api looks like `sk-xxxxxxxxxxx`
+If you wanner use openai-api to get better answers, please set `OPENAI_FOR_DSL` to `true` and `OPENAI_API` to in your environment variables.Your api looks like `sk-xxxxxxxxxxx`
 
 See also [openai-api](https://platform.openai.com/docs/quickstart?context=python).
