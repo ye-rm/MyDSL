@@ -1,0 +1,20 @@
+let bankname="bob";
+let c_name="jeff";
+let cos_level=2;
+let hi="hello, welcome to "+bankname;
+let howtostealmoney="please go ahead to ask manager";
+let hello_msg=fun(x){
+    if (x<5){
+        "hello, welcome to "+bankname;
+    }else{
+        "hello, fuck off from "+bankname;
+    };
+};
+let hello=hello_msg(cos_level);
+let givemeallmoney="yeah, please wait";
+let iamangry=if (cos_level<5){
+    let cos_level=10;
+}else{
+    let cos_level=cos_level;
+};
+let bye="bye, have a nice day";
