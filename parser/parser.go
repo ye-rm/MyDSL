@@ -12,6 +12,16 @@
 // Parse should depend on lexer, so we can get token stream from lexer
 package parser
 
+/*
+	parser use Pratt parsing algorithm
+	Pratt parsing algorithm is a top-down operator precedence parser
+	While parsing, it will check the precedence of current token and next token
+	Then decide which parse function to use
+	By define different parse function for each token, and precedence for each token
+	We can make sure the higher precedence token will at higher level of AST
+	For more information, please refer to https://en.wikipedia.org/wiki/Pratt_parser
+*/
+
 import (
 	"awesomeDSL/ast"
 	"awesomeDSL/lexer"
@@ -37,9 +47,13 @@ const (
 type PrefixParseFn func() ast.Expression
 
 // InfixParseFn define infix parse function
+// it takes an argument of type ast.Expression, which is the left side of the infix operator
+// precedence is the precedence of the token that is being parsed
 type InfixParseFn func(ast.Expression) ast.Expression
 
 // Parser struct contains a lexer and a token pair (curToken and peekToken)
+// errors is a slice of string, which contains all errors
+// PrefixParseFns and InfixParseFns are map, which contains parse function for each token
 type Parser struct {
 	l *lexer.Lexer
 
@@ -63,6 +77,8 @@ func (p *Parser) registerInfix(tokenType token.TokenType, fn InfixParseFn) {
 }
 
 // New create a new parser, parameter is a lexer
+// Call nextToken to init curToken and peekToken
+// Add PrefixParseFns and InfixParseFns
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l, errors: []string{}}
 
@@ -115,6 +131,7 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
+// phrase statement, return ast.Statement interface
 func (p *Parser) phraseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.LET:
@@ -246,7 +263,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 
 	leftExp := prefix()
 	//if next token is not semicolon and precedence is lower than next token's precedence
-	//then get infix parse function
+	//this means right side should be calculated first
+	//so call parseExpression recursively
 	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
 		infix := p.InfixParseFns[p.peekToken.Type]
 
@@ -275,6 +293,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
+// precedences map contains precedence for each token
+// the higher precedence, the higher level of AST
 var precedences = map[token.TokenType]int{
 	token.EQ:       EQUALS,
 	token.NOT_EQ:   EQUALS,

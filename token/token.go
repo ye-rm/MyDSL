@@ -9,9 +9,10 @@ type Token struct {
 	Literal string    // token literal
 }
 
+// Token type const value
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF     = "EOF"
+	ILLEGAL = "ILLEGAL" // illegal token
+	EOF     = "EOF"     // end of file
 
 	ASSIGN = "="
 	PLUS   = "+"

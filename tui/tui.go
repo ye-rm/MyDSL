@@ -130,9 +130,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			p := parser.New(l)
 			program := p.ParseProgram()
 			if len(p.Errors()) != 0 {
-				m.err = fmt.Errorf("Woops! Something bad happens!\n parser errors:\n")
+				m.err = fmt.Errorf("parser errors")
 				for _, msg := range p.Errors() {
-					m.err = fmt.Errorf("%s\t%s\n", m.err, msg)
+					m.err = fmt.Errorf("%s\t%s", m.err, msg)
 				}
 				return m, nil
 			}
@@ -197,9 +197,9 @@ func LoadScript(file *os.File) {
 	p := parser.New(l)
 	program := p.ParseProgram()
 	if len(p.Errors()) != 0 {
-		fmt.Println("Woops! Something bad happens!\n parser errors:\n")
+		fmt.Println("Woops! Something bad happens!\n parser errors:")
 		for _, msg := range p.Errors() {
-			fmt.Println("%s\t%s\n", msg, msg)
+			fmt.Println(msg)
 		}
 	}
 	evaluator.Eval(program, Env)

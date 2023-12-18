@@ -10,7 +10,7 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 	return env
 }
 
-// NewEnvironment create a new environment
+// NewEnvironment create a new symbol table
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
 	return &Environment{store: s, outer: nil}
@@ -19,10 +19,11 @@ func NewEnvironment() *Environment {
 // Environment struct
 type Environment struct {
 	store map[string]Object //symbol table
-	outer *Environment      //outer environment
+	outer *Environment      //pointer to outer environment
 }
 
 // Get symbol from current environment, if not found, get from outer environment
+// if not found in outer environment, return nil
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {
@@ -32,7 +33,8 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
-// Set add symbol to current environment
+// Set add a new symbol to current environment
+// if symbol already exists, it will be overwritten
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val

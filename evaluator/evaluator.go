@@ -20,6 +20,7 @@ import (
 	"fmt"
 )
 
+// constants for boolean object and null object
 var (
 	NULL  = &object.Null{}
 	TRUE  = &object.Boolean{Value: true}
@@ -27,10 +28,12 @@ var (
 )
 
 // Eval evaluate ast node, node: ast.Node interface, env: symbol table
+// If an error occurs during evaluation, it will return an object.Error
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	//evaluate different ast node
 	switch node := node.(type) {
 	case *ast.Program:
+		//evaluate program, program contains a list of statements
 		return evalProgram(node.Statements, env)
 
 	case *ast.ExpressionStatement:
@@ -43,6 +46,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return nativeBooleanObject(node.Value)
 
 	case *ast.PrefixExpression:
+		//evaluate right side
 		right := Eval(node.Right, env)
 		if isError(right) {
 			return right
@@ -50,6 +54,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalPrefixExpression(node.Operator, right)
 
 	case *ast.InfixExpression:
+		//evaluate left side and right side
 		left := Eval(node.Left, env)
 		if isError(left) {
 			return left
@@ -78,6 +83,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
+		//add symbol to symbol table
 		env.Set(node.Name.Value, val)
 
 	case *ast.Identifier:
@@ -126,6 +132,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	return nil
 }
 
+// applyFunction apply function to arguments
+// if function is user defined function, we need to create a new environment
 func applyFunction(fn object.Object, args []object.Object) object.Object {
 	switch fn := fn.(type) {
 	case *object.Function:
@@ -139,6 +147,7 @@ func applyFunction(fn object.Object, args []object.Object) object.Object {
 	}
 }
 
+// extendFunctionEnv create a new environment for user defined function
 func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
 	//符号表加入形参
 	env := object.NewEnclosedEnvironment(fn.Env)
@@ -156,6 +165,7 @@ func unwrapReturnValue(obj object.Object) object.Object {
 	return obj
 }
 
+// evalExpressions evaluate a list of expressions
 func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Object {
 	var result []object.Object
 	for _, e := range exps {
@@ -178,6 +188,8 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	return newError("identifier not found: " + node.Value)
 }
 
+// evalProgram evaluate a list of statements
+// if a return statement is encountered, return the value of return statement
 func evalProgram(stmts []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
 	for _, stmt := range stmts {
@@ -208,6 +220,8 @@ func evalBlockStatement(stmts []ast.Statement, env *object.Environment) object.O
 	return result
 }
 
+// evalPrefixExpression evaluate prefix expression
+// for example: !true, -5
 func evalPrefixExpression(operator string, right object.Object) object.Object {
 	switch operator {
 	case "!":
@@ -247,6 +261,8 @@ func nativeBooleanObject(input bool) *object.Boolean {
 	return FALSE
 }
 
+// evalInfixExpression evaluate infix expression
+// for example: 5 + 5, 5 - 5, 5 * 5, 5 / 5, 5 > 5, 5 < 5, 5 == 5, 5 != 5
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
@@ -345,6 +361,8 @@ func evalIndexExpression(left, index object.Object) object.Object {
 	}
 }
 
+// evalArrayIndexExpression evaluate array index expression
+// if index out of range, return null
 func evalArrayIndexExpression(array, index object.Object) object.Object {
 	arrayObject := array.(*object.Array)
 	idx := index.(*object.Integer).Value

@@ -10,7 +10,6 @@ import (
 // Node is the interface that all nodes in the AST implement.
 // TokenLiteral is used only for debugging and testing.
 type Node interface {
-	//return the phrase item
 	TokenLiteral() string
 	String() string
 }

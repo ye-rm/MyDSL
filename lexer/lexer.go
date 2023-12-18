@@ -20,6 +20,9 @@ type Lexer struct {
 	ch           byte   // current char under examination
 }
 
+// keywords map
+// key: keyword
+// value: token type
 var keywords = map[string]token.TokenType{
 	"if":     token.IF,
 	"else":   token.ELSE,
@@ -31,6 +34,7 @@ var keywords = map[string]token.TokenType{
 	"return": token.RETURN,
 }
 
+// lookupIdent checks the keywords table to see whether the given identifier is in fact a keyword.
 func lookupIdent(ident string) token.TokenType {
 	if tok, ok := keywords[ident]; ok {
 		return tok
@@ -45,6 +49,8 @@ func (l *Lexer) skipWhitespace() {
 }
 
 // New returns a new Lexer. It takes an input string and returns a pointer to a Lexer
+// It sets the input string, sets the position and readPosition fields to 0
+// and calls readChar() to initialize the ch field
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
@@ -62,6 +68,7 @@ func (l *Lexer) readChar() {
 }
 
 // NextToken returns the next token in the input string
+// If the lexer encounters a character it doesn’t know about, it returns an ILLEGAL token
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 	l.skipWhitespace()
@@ -174,7 +181,6 @@ func (l *Lexer) peekChar() byte {
 	}
 }
 
-// return slice of string
 func (l *Lexer) readString() string {
 	position := l.position + 1
 	for {

@@ -1,4 +1,4 @@
-// awesomeDSL is a simple programming language, which helps you build your own DSL.
+// awesomeDSL is a simple DSL, which helps you build your own bot.
 // support basic data types, such as integer, boolean, string, array
 // have builtin functions, such as len, first, last, rest, push
 // support user defined function

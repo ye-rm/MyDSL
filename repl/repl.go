@@ -15,15 +15,9 @@ import (
 )
 
 const PROMPT = "➡️ "
-const WELCOME = `   __    _    _  ____  ___  _____  __  __  ____  ____   ___  __
-  /__\  ( \/\/ )( ___)/ __)(  _  )(  \/  )( ___)(  _ \ / __)(  )
- /(__)\  )    (  )__) \__ \ )(_)(  )    (  )__)  )(_) )\__ \ )(__
-(__)(__)(__/\__)(____)(___/(_____)(_/\/\_)(____)(____/ (___/(____)
-`
 
 // Start the repl loop
 func Start(in io.Reader, out io.Writer) {
-	fmt.Fprint(out, WELCOME)
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
 	for {
