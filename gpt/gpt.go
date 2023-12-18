@@ -6,8 +6,9 @@ package gpt
 import (
 	"context"
 	"fmt"
-	openai "github.com/sashabaranov/go-openai"
 	"os"
+
+	openai "github.com/sashabaranov/go-openai"
 )
 
 const prompt = "You are a customer assistant Bot, answer shorter than 60 chars, query: "
@@ -42,7 +43,6 @@ func GPT(query string) string {
 		os.Exit(1)
 	}
 	client := openai.NewClient(OPENAI_API_KEY)
-
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{

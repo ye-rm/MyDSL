@@ -15,6 +15,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/viewport"
@@ -23,6 +24,7 @@ import (
 )
 
 var Env = object.NewEnvironment()
+var History = []string{}
 
 // GUI is the main function to start the GUI
 func GUI() {
@@ -99,11 +101,29 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.Type {
 		// Ctrl+C and ESC quits the program
 		case tea.KeyCtrlC, tea.KeyEsc:
+			//write history to file
+			//file name is currently date and time
+			t := time.Now()
+			path := "./log/" + t.Format("2006-01-02 15:04:05.000") + ".txt"
+			file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			if err != nil {
+				fmt.Println(err)
+				return m, nil
+			}
+			defer file.Close()
+			for _, msg := range History {
+				_, err := file.WriteString(msg + "\n")
+				if err != nil {
+					fmt.Println(err)
+					return m, nil
+				}
+			}
 			fmt.Println(m.textarea.Value())
 			fmt.Println("Bye!")
 			return m, tea.Quit
 		case tea.KeyEnter:
 			//echo input in terminal
+			History = append(History, input)
 			m.messages = append(m.messages, m.senderStyle.Render("You: ")+m.textarea.Value())
 			m.viewport.SetContent(strings.Join(m.messages, "\n"))
 			m.textarea.Reset()
@@ -120,6 +140,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				default:
 					m.messages = append(m.messages, m.senderStyle.Render("Bot: ")+"I don't know what you mean :(")
 				}
+				History = append(History, m.messages[len(m.messages)-1])
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.textarea.Reset()
 				m.viewport.GotoBottom()
@@ -142,6 +163,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.messages = append(m.messages, m.senderStyle.Render("Bot: ")+evaluated.Inspect())
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.viewport.GotoBottom()
+				History = append(History, m.messages[len(m.messages)-1])
 				break
 			}
 			// here we handle puts buffer if we call puts in script
@@ -150,6 +172,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.viewport.GotoBottom()
 				evaluator.PutsBuffer = ""
+				History = append(History, m.messages[len(m.messages)-1])
 				break
 			}
 		}
