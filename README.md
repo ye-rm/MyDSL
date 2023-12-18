@@ -4,6 +4,8 @@
 
 awesomeDSL is a simple DSL, which helps you build your own bot. support basic data types, such as integer, boolean, string, array have builtin functions, such as len, first, last, rest, push support user defined function support if\-else statement support user defined function Example for a simple program:
 
+By setting env in your shell, awesomeDSL support openai-api, please check end of the README in [examples](./example/) 
+
 the DSL is crazy simple, but it's enough for a simple bot
 
 `let question_without_space` = variable, function call, if-else statement, builtin function
