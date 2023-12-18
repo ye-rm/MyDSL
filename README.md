@@ -22,6 +22,7 @@ let tellmeresult= if result > 0 {
 	puts("result is negative");
 };
 ```
+![example](./demo.gif)
 
 ## Index
 
