@@ -1,5 +1,7 @@
-#examples for awesomeDSL
-##example1 
+# examples for awesomeDSL
+
+## example1 
+
 Best bank service bot ever
 ```
 let bankname="bob";
@@ -26,7 +28,7 @@ let bye="bye, have a nice day";
 To build and run this awesome bot
 ![banker](banker.gif)
 
-##example2
+## example2
 ```
 let value=100;
 let my_list=["hello","hi"];
@@ -55,5 +57,7 @@ To build this bot in your store
 ![pay](pay.gif)
 
 Because `OPENAI_FOR_DSL` not set in this 2 examples, if ask undefined questions, the bot will simples reply it do not understand what you say.
+
 If you wanner use openai-api to get better answers, please set `OPENAI_FOR_DSL` to true and `OPENAI_API` to in your environment variables.Your api looks like `sk-xxxxxxxxxxx`
+
 See also [openai-api](https://platform.openai.com/docs/quickstart?context=python).
