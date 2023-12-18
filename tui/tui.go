@@ -64,7 +64,7 @@ func initialModel() model {
 	ta.ShowLineNumbers = false
 
 	vp := viewport.New(130, 5)
-	vp.SetContent(`Welcome to the chat room!
+	vp.SetContent(`Welcome to the chat bot!
 Type a message and press Enter to send.`)
 
 	ta.KeyMap.InsertNewline.SetEnabled(false)
