@@ -175,21 +175,21 @@ func (m model) View() string {
 }
 
 // LoadScript load script from file and evaluate it
-func LoadScript(file *os.File) {
+func LoadScript(file *os.File) bool {
 	//open file
 	script := ""
 	//read file in a string
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
 	scriptSize := fileInfo.Size()
 	scriptBytes := make([]byte, scriptSize)
 	_, err = file.Read(scriptBytes)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
 	script = string(scriptBytes)
 	//parse script
@@ -201,6 +201,8 @@ func LoadScript(file *os.File) {
 		for _, msg := range p.Errors() {
 			fmt.Println(msg)
 		}
+		return false
 	}
 	evaluator.Eval(program, Env)
+	return true
 }

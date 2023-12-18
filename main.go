@@ -41,6 +41,8 @@ func main() {
 		_ = file.Close()
 	}(file)
 	gpt.Init()
-	tui.LoadScript(file)
+	if !tui.LoadScript(file) {
+		os.Exit(1)
+	}
 	tui.GUI()
 }
