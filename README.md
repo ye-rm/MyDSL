@@ -2,6 +2,8 @@
 
 # awesomeDSL
 
+![9288bb6079791eefac2cb65121acca71](https://typora-markdown-2003.obs.cn-north-4.myhuaweicloud.com/9288bb6079791eefac2cb65121acca71.jpg)
+
 awesomeDSL is a simple DSL, which helps you build your own bot. support basic data types, such as integer, boolean, string, array have builtin functions, such as len, first, last, rest, push support user defined function support if\-else statement support user defined function Example for a simple program:
 
 By setting env in your shell, awesomeDSL support openai-api, please check [doc](./doc/README.md) for more details.
