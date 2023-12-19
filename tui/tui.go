@@ -123,7 +123,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case tea.KeyEnter:
 			//echo input in terminal
-			History = append(History, input)
 			m.messages = append(m.messages, m.senderStyle.Render("You: ")+m.textarea.Value())
 			m.viewport.SetContent(strings.Join(m.messages, "\n"))
 			m.textarea.Reset()
@@ -140,7 +139,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				default:
 					m.messages = append(m.messages, m.senderStyle.Render("Bot: ")+"I don't know what you mean :(")
 				}
-				History = append(History, m.messages[len(m.messages)-1])
+				History = append(History, strings.Join(m.messages, "\n"))
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.textarea.Reset()
 				m.viewport.GotoBottom()
@@ -161,18 +160,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if evaluated != nil && evaluated.Type() != object.NULL_OBJ {
 				//if evaluated is not null, echo it in terminal
 				m.messages = append(m.messages, m.senderStyle.Render("Bot: ")+evaluated.Inspect())
+				History = append(History, strings.Join(m.messages, "\n"))
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.viewport.GotoBottom()
-				History = append(History, m.messages[len(m.messages)-1])
 				break
 			}
 			// here we handle puts buffer if we call puts in script
 			if evaluator.PutsBuffer != "" {
 				m.messages = append(m.messages, m.senderStyle.Render("Bot: ")+evaluator.PutsBuffer)
+				History = append(History, strings.Join(m.messages, "\n"))
 				m.viewport.SetContent(strings.Join(m.messages, "\n"))
 				m.viewport.GotoBottom()
 				evaluator.PutsBuffer = ""
-				History = append(History, m.messages[len(m.messages)-1])
 				break
 			}
 		}
