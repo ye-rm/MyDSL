@@ -4,7 +4,7 @@
 
 awesomeDSL is a simple DSL, which helps you build your own bot. support basic data types, such as integer, boolean, string, array have builtin functions, such as len, first, last, rest, push support user defined function support if\-else statement support user defined function Example for a simple program:
 
-By setting env in your shell, awesomeDSL support openai-api, please check end of the README in [examples](./example/) 
+By setting env in your shell, awesomeDSL support openai-api, please check [doc](./doc/README.md) for more details.
 
 the DSL is crazy simple, but it's enough for a simple bot
 
@@ -53,25 +53,8 @@ let index = arr2[0];
 let len = "hello"+" world";
 ```
 
-## Index of Documentation
-[Lexer](./doc/lexer.md)
-
-[Parser](./doc/parser.md)
-
-[Evaluator](./doc/evaluator.md)
-
-[Token](./doc/token.md)
-
-[Ast](./doc/ast.md)
-
-[Object](./doc/object.md)
-
-[TUI](./doc/tui.md)
-
-[Repl](./doc/repl.md)
-
-[Gpt](./doc/gpt.md)
-
+## Documentation
+you can check the [doc](./doc/) for more details.
 
 ## Quick Start
 `go build main.go`
