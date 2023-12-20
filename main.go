@@ -13,7 +13,7 @@
 //		x + y;
 //	};
 //	let result = add(a, b);
-//	let tellmeresult= if result > 0 {
+//	let tellmeresult= if (result > 0) {
 //		puts("result is positive");
 //	} else {
 //		puts("result is negative");
