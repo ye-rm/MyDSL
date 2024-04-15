@@ -2,6 +2,8 @@
 
 # DSL For Programming Practice (BUPT) 
 
+## 暂时就叫“波普特鼠人客服/解释器”🤔
+
 ⚠️本项目为北京邮电大学《程序设计实践》课程所要求课程设计，这个项目并不适合真的来实现DSL，小幅修改+强行解释作为课程大作业，但涵盖了课程设计中的大部分要求
 
 参考自索斯藤·鲍尔（Thorsten Ball）的[《用GO语言自制解释器》](https://book.douban.com/subject/35909085/)
