@@ -10,6 +10,7 @@
 
 适合想体验GO语言+体验手撕解释器+恰好选中这门课程的同学作为参考（但这个项目和Go语言关系不大）
 
+底下这些洋文是chrome book输入法打架导致的
 
 ⚠️ This project is a course design required for the "Programming Practice" course at Beijing University of Posts and Telecommunications (BUPT)
 
