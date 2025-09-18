@@ -8,7 +8,7 @@
 
 参考自索斯藤·鲍尔（Thorsten Ball）的[《用GO语言自制解释器》](https://book.douban.com/subject/35909085/)
 
-适合想体验GO语言+体验手撕解释器+恰好选中这门课程的同学作为参考
+适合想体验GO语言+体验手撕解释器+恰好选中这门课程的同学作为参考（但这个项目和Go语言关系不大）
 
 
 ⚠️ This project is a course design required for the "Programming Practice" course at Beijing University of Posts and Telecommunications (BUPT)
